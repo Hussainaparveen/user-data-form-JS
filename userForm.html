@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USER DATA FORM</title>
+    <style>
+        body{
+            background-color: bisque;
+        }
+        input{
+            display:block;
+            margin-bottom: 10px;
+        }
+        table,th,td{
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        th,td{
+            padding:5px;
+        }
+        #sbutton{
+            margin-bottom: 10px;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>USER DATA FORM</h1>
+    <form>
+        <input type="text" placeholder="Enter your username" id="username">
+        <input type="text" placeholder="Enter your mobile No" id="mobileno">
+        <input type="text" placeholder="Enter your designation" id="desig">
+        <button type="button" onclick="submitData()" id="sbutton">SUBMIT</button>
+    </form>
+    
+    <table>
+        <thead>
+            <th>USER NAME</th>
+            <th>MOBILE-NO</th>
+            <th>DESIGNATION</th>
+            <th>ACTION</th>
+        </thead>
+        <tbody id="userTable">
+
+        </tbody>
+    </table>
+
+    <script>
+        let dataArray=[];
+        let edit_index=-1;
+
+        function submitData(){
+
+            let userData={
+                userName: document.getElementById("username").value,
+                mobileNo: document.getElementById("mobileno").value,
+                designation: document.getElementById("desig").value 
+            };
+
+            if(edit_index !==-1){
+                dataArray[edit_index]=userData;
+                edit_index=-1;
+            }else{
+                dataArray.push(userData);
+            }
+
+            document.getElementById("username").value="";
+            document.getElementById("mobileno").value="";
+            document.getElementById("desig").value="";
+
+            updateTable();
+
+        }
+
+        function editUserData(index){
+            let table_row=dataArray[index];
+            document.getElementById("username").value=table_row.userName;
+            document.getElementById("mobileno").value=table_row.mobileNo;
+            document.getElementById("desig").value=table_row.designation;
+
+            edit_index=index;
+
+        }
+
+        function deleteUserData(index){
+            dataArray.splice(index,1);
+            updateTable();
+
+        }
+
+        function updateTable(){
+            let tableData="";
+            for(let i=0 ; i < dataArray.length ; i++){
+                tempData=dataArray[i];
+                let data=`<tr>
+                    <td>${tempData.userName}</td>
+                    <td>${tempData.mobileNo}</td>
+                    <td>${tempData.designation}</td>
+                    <td><button onclick="editUserData(${i})">EDIT</button>
+                        <button onclick="deleteUserData(${i})">DELETE</button>
+                    </td>
+                    </tr>`;
+
+                    tableData += data;
+            }
+            let table= document.getElementById("userTable")
+            table.innerHTML=tableData;
+        }
+    </script>
+</body>
+</html>
